@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#8fd0dc" />
+  <meta
+    name="description"
+    content="Bubble Sort Puzzle is a colorful and relaxing sorting game. Match the bubbles, solve clever levels, and challenge your brain."
+  />
+  <title>Bubble Sort Puzzle</title>
+
+  <style>
+    :root {
+      --sky: #8fd0dc;
+      --sky-light: #c8eef3;
+      --navy: #274657;
+      --navy-soft: #395d6e;
+      --grass: #87c77a;
+      --green: #abd542;
+      --yellow: #ffc13a;
+      --pink: #ef5ca6;
+      --blue: #0d95c9;
+      --red: #ef2c37;
+      --purple: #8576c8;
+      --white: #ffffff;
+      --shadow: 0 10px 0 rgba(39, 70, 87, 0.15);
+      --soft-shadow: 0 18px 40px rgba(39, 70, 87, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--sky);
+      color: var(--navy);
+      font-family: "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-shell {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bubble-decoration {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.28;
+      pointer-events: none;
+      filter: blur(0.5px);
+    }
+
+    .bubble-one {
+      width: 130px;
+      height: 130px;
+      top: 120px;
+      left: -42px;
+      background: #ffffff;
+    }
+
+    .bubble-two {
+      width: 75px;
+      height: 75px;
+      top: 320px;
+      right: 5%;
+      background: #ffffff;
+    }
+
+    .bubble-three {
+      width: 190px;
+      height: 190px;
+      top: 670px;
+      right: -70px;
+      background: #58bdce;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: relative;
+      z-index: 20;
+      padding: 22px 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .logo-icon {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border: 4px solid var(--navy);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.32);
+      transform: rotate(-4deg);
+    }
+
+    .logo-icon::before,
+    .logo-icon::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .logo-icon::before {
+      top: 4px;
+      background: var(--pink);
+    }
+
+    .logo-icon::after {
+      top: 19px;
+      background: var(--yellow);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .nav-links a {
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      transform: translateY(-2px);
+      opacity: 0.75;
+    }
+
+    .nav-button,
+    .primary-button,
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 16px;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-button {
+      min-height: 44px;
+      padding: 0 19px;
+      background: var(--green);
+      color: var(--white);
+      box-shadow: 0 6px 0 #82af26;
+    }
+
+    .primary-button {
+      background: var(--green);
+      color: var(--white);
+      box-shadow: 0 8px 0 #82af26;
+    }
+
+    .secondary-button {
+      background: var(--purple);
+      color: var(--white);
+      box-shadow: 0 8px 0 #675ca3;
+    }
+
+    .nav-button:hover,
+    .primary-button:hover,
+    .secondary-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .nav-button:active,
+    .primary-button:active,
+    .secondary-button:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 rgba(39, 70, 87, 0.32);
+    }
+
+    .hero {
+      position: relative;
+      z-index: 2;
+      min-height: 720px;
+      padding: 55px 0 105px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.03fr 0.97fr;
+      align-items: center;
+      gap: 70px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.33);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 14px 0 0 var(--yellow), 28px 0 0 var(--blue);
+      margin-right: 26px;
+    }
+
+    .hero-title {
+      max-width: 640px;
+      font-size: clamp(3.6rem, 7vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: -0.075em;
+      font-weight: 900;
+    }
+
+    .hero-title .word-bubble {
+      display: block;
+      margin-top: 18px;
+      font-size: 0.42em;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    .letter-box {
+      display: inline-grid;
+      place-items: center;
+      width: 0.88em;
+      height: 0.92em;
+      margin-right: 0.02em;
+      border-radius: 0.18em;
+      color: var(--white);
+      text-shadow: 0 3px 0 rgba(0, 0, 0, 0.07);
+      box-shadow: 0 9px 0 rgba(39, 70, 87, 0.12);
+      transform: rotate(var(--r, 0deg));
+    }
+
+    .letter-box:nth-child(1) { background: var(--green); --r: -5deg; }
+    .letter-box:nth-child(2) { background: var(--yellow); --r: 2deg; }
+    .letter-box:nth-child(3) { background: var(--pink); --r: -2deg; }
+    .letter-box:nth-child(4) { background: #ffd95d; --r: 3deg; }
+    .letter-box:nth-child(5) { background: var(--blue); --r: -2deg; }
+    .letter-box:nth-child(6) { background: var(--red); --r: 3deg; }
+
+    .hero-copy {
+      max-width: 570px;
+      margin-top: 27px;
+      font-size: 1.12rem;
+      color: var(--navy-soft);
+      font-weight: 700;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 17px;
+      margin-top: 34px;
+    }
+
+    .button-icon {
+      margin-right: 9px;
+      font-size: 0.9em;
+    }
+
+    .hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 29px;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .hero-point {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check {
+      display: inline-grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .game-preview-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 590px;
+    }
+
+    .game-preview-wrap::before {
+      content: "";
+      position: absolute;
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .phone {
+      position: relative;
+      width: 290px;
+      height: 590px;
+      padding: 14px;
+      border: 9px solid #172b36;
+      border-radius: 44px;
+      background: #172b36;
+      box-shadow: 0 28px 55px rgba(22, 51, 65, 0.28);
+      transform: rotate(2.5deg);
+      z-index: 3;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 50%;
+      width: 118px;
+      height: 24px;
+      border-radius: 0 0 18px 18px;
+      background: #172b36;
+      transform: translateX(-50%);
+    }
+
+    .phone-screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 29px;
+      background: linear-gradient(#91d1dc 0 88%, #8bc87b 88%);
+    }
+
+    .game-topbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 28px 18px 0;
+      font-size: 0.74rem;
+      font-weight: 900;
+    }
+
+    .coin {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .coin-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #e0a92b;
+      background: #ffd44e;
+    }
+
+    .tubes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px 10px;
+      padding: 62px 24px 0;
+    }
+
+    .tube {
+      position: relative;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: flex-start;
+      width: 43px;
+      height: 142px;
+      padding: 7px 4px 8px;
+      border: 3px solid #3c6576;
+      border-top: 0;
+      border-radius: 0 0 22px 22px;
+      background: rgba(255, 255, 255, 0.23);
+      box-shadow: inset 5px 0 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .tube::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: -5px;
+      width: 47px;
+      height: 7px;
+      border: 3px solid #3c6576;
+      border-radius: 50%;
+      background: #bde6eb;
+    }
+
+    .ball {
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: 29px;
+      height: 29px;
+      margin-top: 2px;
+      border-radius: 50%;
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .pink { background: var(--pink); }
+    .yellow { background: var(--yellow); }
+    .blue { background: var(--blue); }
+    .red { background: #ee4c64; }
+    .purple { background: #8f5bab; }
+    .green { background: #59b55c; }
+
+    .game-message {
+      width: 80%;
+      margin: 28px auto 0;
+      text-align: center;
+      font-size: 0.68rem;
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    .game-nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      color: var(--white);
+      font-size: 0.67rem;
+      font-weight: 900;
+    }
+
+    .game-nav-item {
+      display: grid;
+      place-items: center;
+      gap: 3px;
+    }
+
+    .game-nav-icon {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      font-size: 0.9rem;
+    }
+
+    /* Playable demo */
+    #demoGame .demo-tube {
+      appearance: none;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    #demoGame .demo-tube:hover {
+      transform: translateY(-4px);
+      filter: brightness(1.04);
+    }
+
+    #demoGame .demo-tube:focus-visible {
+      outline: 4px solid rgba(255, 255, 255, 0.92);
+      outline-offset: 5px;
+    }
+
+    #demoGame .demo-tube.selected {
+      transform: translateY(-15px);
+      filter: drop-shadow(0 10px 7px rgba(39, 70, 87, 0.22));
+    }
+
+    #demoGame .demo-tube.valid-target {
+      box-shadow:
+        inset 0 0 0 4px rgba(255, 255, 255, 0.42),
+        0 0 0 3px rgba(171, 213, 66, 0.55);
+    }
+
+    #demoGame .demo-tube.hint-target {
+      animation: hintPulse 0.8s ease-in-out infinite alternate;
+    }
+
+    #demoGame .demo-tube.shake {
+      animation: demoShake 0.28s ease;
+    }
+
+    #demoGame .ball {
+      pointer-events: none;
+      animation: bubbleAppear 0.18s ease-out;
+    }
+
+    .game-message {
+      min-height: 42px;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .game-message.success {
+      color: #247446;
+      transform: scale(1.04);
+    }
+
+    .game-message.warning {
+      color: #9a3d49;
+    }
+
+    .game-nav-item {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .game-nav-item:hover .game-nav-icon,
+    .game-nav-item:focus-visible .game-nav-icon {
+      transform: translateY(-3px) scale(1.06);
+    }
+
+    .game-nav-item:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 5px;
+      border-radius: 8px;
+    }
+
+    .game-nav-item:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .game-nav-icon {
+      transition: transform 0.2s ease;
+    }
+
+    .demo-complete .phone-screen {
+      box-shadow: inset 0 0 0 5px rgba(171, 213, 66, 0.8);
+    }
+
+    @keyframes demoShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @keyframes hintPulse {
+      from {
+        transform: translateY(0);
+        filter: drop-shadow(0 0 0 rgba(255, 193, 58, 0));
+      }
+      to {
+        transform: translateY(-8px);
+        filter: drop-shadow(0 8px 8px rgba(255, 193, 58, 0.55));
+      }
+    }
+
+    @keyframes bubbleAppear {
+      from {
+        transform: translateY(-8px) scale(0.82);
+        opacity: 0.35;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .floating-ball {
+      position: absolute;
+      z-index: 4;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      box-shadow: inset 0 -7px 0 rgba(0, 0, 0, 0.08), var(--soft-shadow);
+      animation: float 4.2s ease-in-out infinite;
+    }
+
+    .floating-ball.one {
+      top: 35px;
+      right: 18px;
+      background: var(--pink);
+    }
+
+    .floating-ball.two {
+      bottom: 72px;
+      left: -10px;
+      width: 48px;
+      height: 48px;
+      background: var(--yellow);
+      animation-delay: -1.1s;
+    }
+
+    .floating-ball.three {
+      top: 210px;
+      left: 17px;
+      width: 40px;
+      height: 40px;
+      background: var(--blue);
+      animation-delay: -2.2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-15px) rotate(8deg); }
+    }
+
+    .grass-divider {
+      position: absolute;
+      left: -5%;
+      right: -5%;
+      bottom: -1px;
+      height: 120px;
+      border-radius: 50% 50% 0 0 / 25% 25% 0 0;
+      background: var(--grass);
+      transform: rotate(-1deg);
+    }
+
+    .section {
+      position: relative;
+      padding: 100px 0;
+    }
+
+    .section-green {
+      background: var(--grass);
+    }
+
+    .section-light {
+      background: #e3f6f8;
+    }
+
+    .section-heading {
+      max-width: 700px;
+      margin: 0 auto 54px;
+      text-align: center;
+    }
+
+    .section-heading .mini-title {
+      display: inline-block;
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(39, 70, 87, 0.72);
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2.2rem, 5vw, 4.3rem);
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    .section-heading p {
+      max-width: 620px;
+      margin: 17px auto 0;
+      color: var(--navy-soft);
+      font-weight: 700;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      position: relative;
+      min-height: 270px;
+      padding: 30px;
+      overflow: hidden;
+      border: 4px solid rgba(39, 70, 87, 0.13);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.73);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      width: 115px;
+      height: 115px;
+      right: -38px;
+      bottom: -38px;
+      border-radius: 50%;
+      background: var(--accent, var(--pink));
+      opacity: 0.15;
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 62px;
+      height: 62px;
+      margin-bottom: 24px;
+      border-radius: 19px;
+      background: var(--accent, var(--pink));
+      color: var(--white);
+      font-size: 1.65rem;
+      box-shadow: 0 7px 0 rgba(39, 70, 87, 0.14);
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.25rem;
+      line-height: 1.15;
+    }
+
+    .feature-card p {
+      color: var(--navy-soft);
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    .feature-card:nth-child(1) { --accent: var(--pink); }
+    .feature-card:nth-child(2) { --accent: var(--blue); }
+    .feature-card:nth-child(3) { --accent: var(--yellow); }
+    .feature-card:nth-child(4) { --accent: var(--purple); }
+    .feature-card:nth-child(5) { --accent: var(--green); }
+    .feature-card:nth-child(6) { --accent: var(--red); }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: 0.93fr 1.07fr;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .mini-board {
+      position: relative;
+      min-height: 530px;
+      padding: 46px;
+      border: 5px solid rgba(39, 70, 87, 0.2);
+      border-radius: 42px;
+      background: var(--sky);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .mini-board .tubes-grid {
+      grid-template-columns: repeat(4, max-content);
+      justify-content: center;
+      gap: 18px;
+      padding: 26px 0 0;
+    }
+
+    .mini-board .tube {
+      width: 52px;
+      height: 168px;
+    }
+
+    .mini-board .tube::before {
+      width: 56px;
+    }
+
+    .mini-board .ball {
+      width: 35px;
+      height: 35px;
+    }
+
+    .challenge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      padding: 10px 15px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.45);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .steps {
+      display: grid;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 17px;
+      align-items: start;
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 1.35rem;
+      font-weight: 900;
+      box-shadow: 0 7px 0 rgba(39, 70, 87, 0.13);
+    }
+
+    .step:nth-child(1) { --accent: var(--pink); }
+    .step:nth-child(2) { --accent: var(--yellow); }
+    .step:nth-child(3) { --accent: var(--blue); }
+
+    .step h3 {
+      margin-bottom: 5px;
+      font-size: 1.25rem;
+    }
+
+    .step p {
+      color: var(--navy-soft);
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 72px;
+    }
+
+    .stat-card {
+      padding: 28px 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.58);
+      text-align: center;
+      box-shadow: 0 7px 0 rgba(39, 70, 87, 0.1);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-top: 9px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: var(--navy-soft);
+    }
+
+    .about-card {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 48px;
+      padding: 55px;
+      border-radius: 38px;
+      background: var(--sky);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .about-card h2 {
+      max-width: 620px;
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .about-card p {
+      margin-top: 22px;
+      color: var(--navy-soft);
+      font-weight: 700;
+    }
+
+    .about-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .about-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      font-weight: 900;
+    }
+
+    .about-visual {
+      position: relative;
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+    }
+
+    .big-bubble {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: inset 0 -20px 0 rgba(0, 0, 0, 0.08), 0 22px 0 rgba(39, 70, 87, 0.1);
+    }
+
+    .big-bubble::before,
+    .big-bubble::after {
+      content: "";
+      position: absolute;
+      top: 103px;
+      width: 26px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--navy);
+    }
+
+    .big-bubble::before { left: 78px; }
+    .big-bubble::after { right: 78px; }
+
+    .smile {
+      position: absolute;
+      top: 140px;
+      width: 75px;
+      height: 38px;
+      border-bottom: 9px solid var(--navy);
+      border-radius: 0 0 60px 60px;
+    }
+
+    .shine {
+      position: absolute;
+      top: 45px;
+      left: 62px;
+      width: 48px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.32);
+      transform: rotate(-28deg);
+    }
+
+    .small-bubble {
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: inset 0 -7px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .small-bubble.one {
+      width: 72px;
+      height: 72px;
+      top: 25px;
+      right: 20px;
+      background: var(--yellow);
+    }
+
+    .small-bubble.two {
+      width: 55px;
+      height: 55px;
+      bottom: 40px;
+      left: 5px;
+      background: var(--blue);
+    }
+
+    .cta {
+      position: relative;
+      overflow: hidden;
+      padding: 90px 0;
+      background: var(--grass);
+      text-align: center;
+    }
+
+    .cta::before,
+    .cta::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.19);
+    }
+
+    .cta::before {
+      width: 220px;
+      height: 220px;
+      top: -70px;
+      left: -50px;
+    }
+
+    .cta::after {
+      width: 170px;
+      height: 170px;
+      bottom: -40px;
+      right: 2%;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-size: clamp(2.4rem, 5vw, 4.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+    }
+
+    .cta p {
+      max-width: 620px;
+      margin: 18px auto 31px;
+      color: var(--navy-soft);
+      font-weight: 700;
+    }
+
+    .store-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .store-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 190px;
+      padding: 12px 20px;
+      border-radius: 16px;
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 7px 0 rgba(21, 43, 54, 0.35);
+      text-align: left;
+      transition: transform 0.2s ease;
+    }
+
+    .store-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .store-icon {
+      font-size: 1.7rem;
+    }
+
+    .store-small {
+      display: block;
+      font-size: 0.67rem;
+      line-height: 1.1;
+      opacity: 0.8;
+    }
+
+    .store-large {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .site-footer {
+      padding: 34px 0;
+      background: var(--navy);
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .footer-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .copyright {
+      font-size: 0.78rem;
+      opacity: 0.75;
+    }
+
+    @media (max-width: 960px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 20px;
+      }
+
+      .hero-grid,
+      .how-grid,
+      .about-card {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-grid {
+        gap: 28px;
+      }
+
+      .hero-content {
+        text-align: center;
+      }
+
+      .hero-copy {
+        margin-inline: auto;
+      }
+
+      .hero-actions,
+      .hero-points {
+        justify-content: center;
+      }
+
+      .game-preview-wrap {
+        min-height: 630px;
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .how-grid {
+        gap: 50px;
+      }
+
+      .steps-copy {
+        order: -1;
+      }
+
+      .about-card {
+        padding: 42px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .container {
+        width: min(100% - 24px, 1120px);
+      }
+
+      .site-header {
+        padding: 15px 0;
+      }
+
+      .logo {
+        font-size: 1rem;
+      }
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .nav-button {
+        min-height: 39px;
+        padding-inline: 14px;
+        font-size: 0.82rem;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 48px 0 95px;
+      }
+
+      .hero-title {
+        font-size: clamp(3.15rem, 17vw, 5rem);
+      }
+
+      .hero-title .word-bubble {
+        font-size: 0.35em;
+      }
+
+      .hero-copy {
+        font-size: 1rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .primary-button,
+      .secondary-button {
+        width: 100%;
+      }
+
+      .hero-points {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+      .game-preview-wrap {
+        min-height: 545px;
+      }
+
+      .game-preview-wrap::before {
+        width: 330px;
+        height: 330px;
+      }
+
+      .phone {
+        width: 245px;
+        height: 500px;
+        border-radius: 38px;
+      }
+
+      .tubes-grid {
+        gap: 10px 6px;
+        padding-inline: 14px;
+        padding-top: 50px;
+      }
+
+      .tube {
+        width: 37px;
+        height: 120px;
+      }
+
+      .tube::before {
+        width: 41px;
+      }
+
+      .ball {
+        width: 25px;
+        height: 25px;
+      }
+
+      .feature-grid,
+      .stats,
+      .about-list {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 75px 0;
+      }
+
+      .feature-card {
+        min-height: 0;
+      }
+
+      .mini-board {
+        min-height: 430px;
+        padding: 24px 12px;
+      }
+
+      .mini-board .tubes-grid {
+        gap: 9px;
+      }
+
+      .mini-board .tube {
+        width: 42px;
+        height: 140px;
+      }
+
+      .mini-board .tube::before {
+        width: 46px;
+      }
+
+      .mini-board .ball {
+        width: 29px;
+        height: 29px;
+      }
+
+      .about-card {
+        padding: 30px 23px;
+      }
+
+      .big-bubble {
+        width: 220px;
+        height: 220px;
+      }
+
+      .big-bubble::before,
+      .big-bubble::after {
+        top: 83px;
+      }
+
+      .big-bubble::before { left: 61px; }
+      .big-bubble::after { right: 61px; }
+
+      .smile {
+        top: 118px;
+      }
+
+      .footer-grid {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <span class="bubble-decoration bubble-one"></span>
+    <span class="bubble-decoration bubble-two"></span>
+    <span class="bubble-decoration bubble-three"></span>
+
+    <header class="site-header">
+      <div class="container nav">
+        <a href="#home" class="logo" aria-label="Bubble Sort Puzzle home">
+          <span class="logo-icon" aria-hidden="true"></span>
+          <span>Bubble Sort Puzzle</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#features">Features</a>
+          <a href="#how-to-play">How to Play</a>
+          <a href="#about">About</a>
+        </nav>
+
+        <a href="#demoGame" class="nav-button">Play Demo</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="container hero-grid">
+          <div class="hero-content">
+            <div class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              Colorful brain puzzle
+            </div>
+
+            <h1 class="hero-title">
+              Bubble Sort
+              <span class="word-bubble" aria-label="Puzzle">
+                <span class="letter-box">P</span>
+                <span class="letter-box">U</span>
+                <span class="letter-box">Z</span>
+                <span class="letter-box">Z</span>
+                <span class="letter-box">L</span>
+                <span class="letter-box">E</span>
+              </span>
+            </h1>
+
+            <p class="hero-copy">
+              Sort colorful bubbles into matching tubes, complete clever levels,
+              and enjoy a relaxing puzzle experience made for all ages.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#demoGame" class="primary-button">
+                <span class="button-icon">▶</span>
+                Play Demo Level
+              </a>
+              <a href="#how-to-play" class="secondary-button">How to Play</a>
+            </div>
+
+            <div class="hero-points">
+              <span class="hero-point"><span class="check">✓</span> Easy to learn</span>
+              <span class="hero-point"><span class="check">✓</span> Play offline</span>
+              <span class="hero-point"><span class="check">✓</span> Hundreds of levels</span>
+            </div>
+          </div>
+
+          <div
+            class="game-preview-wrap"
+            id="demoGame"
+            aria-label="Playable Bubble Sort Puzzle demo"
+          >
+            <span class="floating-ball one"></span>
+            <span class="floating-ball two"></span>
+            <span class="floating-ball three"></span>
+
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="game-topbar">
+                  <span>▶ &nbsp; Playable Demo</span>
+                  <span id="demoMoves">Moves: 0</span>
+                </div>
+
+                <div class="tubes-grid" id="demoTubes" aria-label="Bubble sorting tubes">
+                  <button class="tube demo-tube" type="button" data-index="0"></button>
+                  <button class="tube demo-tube" type="button" data-index="1"></button>
+                  <button class="tube demo-tube" type="button" data-index="2"></button>
+                  <button class="tube demo-tube" type="button" data-index="3"></button>
+                  <button class="tube demo-tube" type="button" data-index="4"></button>
+                  <button class="tube demo-tube" type="button" data-index="5"></button>
+                </div>
+
+                <p class="game-message" id="demoStatus" aria-live="polite">
+                  Tap a tube, then move its top bubble to an empty or matching tube.
+                </p>
+
+                <div class="game-nav">
+                  <button class="game-nav-item" id="restartDemo" type="button">
+                    <span class="game-nav-icon">↻</span>Replay
+                  </button>
+                  <button class="game-nav-item" id="undoDemo" type="button">
+                    <span class="game-nav-icon">↶</span>Undo
+                  </button>
+                  <button class="game-nav-item" id="hintDemo" type="button">
+                    <span class="game-nav-icon">♡</span>Hint
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grass-divider" aria-hidden="true"></div>
+      </section>
+
+      <section class="section section-green" id="features">
+        <div class="container">
+          <div class="section-heading">
+            <span class="mini-title">Game Features</span>
+            <h2>Simple, colorful and seriously satisfying</h2>
+            <p>
+              Every level is designed to help you relax, think ahead and enjoy
+              the satisfying moment when every tube becomes perfectly sorted.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon">●</div>
+              <h3>Colorful Bubble Puzzles</h3>
+              <p>Move bright bubbles between tubes and group every matching color.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <h3>Train Your Brain</h3>
+              <p>Plan each move, improve logical thinking and solve increasingly smart levels.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">★</div>
+              <h3>Many Unique Levels</h3>
+              <p>Start easy and unlock fresh challenges with new layouts and color combinations.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>Quick Undo & Restart</h3>
+              <p>Made a wrong move? Undo it instantly or restart the level whenever you need.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">☁</div>
+              <h3>Play Anywhere</h3>
+              <p>Enjoy your favorite sorting puzzle at home, while traveling or during a break.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">♡</div>
+              <h3>Relaxing Gameplay</h3>
+              <p>Calm visuals, smooth interactions and satisfying wins make every session enjoyable.</p>
+            </article>
+          </div>
+
+          <div class="stats">
+            <div class="stat-card">
+              <strong>500+</strong>
+              <span>Puzzle Levels</span>
+            </div>
+            <div class="stat-card">
+              <strong>6+</strong>
+              <span>Bubble Colors</span>
+            </div>
+            <div class="stat-card">
+              <strong>Offline</strong>
+              <span>Play Anytime</span>
+            </div>
+            <div class="stat-card">
+              <strong>All Ages</strong>
+              <span>Family Friendly</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-light" id="how-to-play">
+        <div class="container how-grid">
+          <div class="mini-board" aria-label="Example bubble sorting board">
+            <div class="challenge-pill">🎯 Complete the color challenge</div>
+
+            <div class="tubes-grid">
+              <div class="tube">
+                <span class="ball yellow"></span>
+                <span class="ball pink"></span>
+                <span class="ball yellow"></span>
+                <span class="ball pink"></span>
+              </div>
+
+              <div class="tube">
+                <span class="ball green"></span>
+                <span class="ball blue"></span>
+                <span class="ball green"></span>
+                <span class="ball blue"></span>
+              </div>
+
+              <div class="tube">
+                <span class="ball pink"></span>
+                <span class="ball pink"></span>
+              </div>
+
+              <div class="tube"></div>
+
+              <div class="tube">
+                <span class="ball purple"></span>
+                <span class="ball red"></span>
+                <span class="ball purple"></span>
+                <span class="ball red"></span>
+              </div>
+
+              <div class="tube">
+                <span class="ball yellow"></span>
+                <span class="ball yellow"></span>
+              </div>
+
+              <div class="tube">
+                <span class="ball blue"></span>
+                <span class="ball green"></span>
+              </div>
+
+              <div class="tube"></div>
+            </div>
+          </div>
+
+          <div class="steps-copy">
+            <div class="section-heading" style="text-align:left; margin:0;">
+              <span class="mini-title">How to Play</span>
+              <h2>Sort every bubble in three easy steps</h2>
+              <p style="margin-left:0;">
+                The rules are simple, but each new level gives you a fresh puzzle to solve.
+              </p>
+            </div>
+
+            <div class="steps">
+              <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                  <h3>Choose a tube</h3>
+                  <p>Tap a tube to select the bubble sitting at the very top.</p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                  <h3>Move the bubble</h3>
+                  <p>Place it into an empty tube or on top of another bubble with the same color.</p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                  <h3>Complete the level</h3>
+                  <p>Keep sorting until every tube contains only one matching bubble color.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-light" id="about">
+        <div class="container">
+          <div class="about-card">
+            <div>
+              <span class="mini-title">About the Game</span>
+              <h2>A small puzzle game with big colorful fun</h2>
+              <p>
+                Bubble Sort Puzzle combines relaxing gameplay with satisfying logic challenges.
+                It is perfect for quick breaks, long trips and quiet moments when you want to
+                refresh your mind.
+              </p>
+
+              <div class="about-list">
+                <div class="about-item"><span class="check">✓</span> Clean and friendly design</div>
+                <div class="about-item"><span class="check">✓</span> Smooth bubble movement</div>
+                <div class="about-item"><span class="check">✓</span> Helpful undo system</div>
+                <div class="about-item"><span class="check">✓</span> Regular new challenges</div>
+              </div>
+            </div>
+
+            <div class="about-visual" aria-hidden="true">
+              <span class="small-bubble one"></span>
+              <span class="small-bubble two"></span>
+              <div class="big-bubble">
+                <span class="shine"></span>
+                <span class="smile"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta" id="download">
+        <div class="container cta-content">
+          <h2>Ready to sort, solve and relax?</h2>
+          <p>
+            Download Bubble Sort Puzzle and start organizing colorful bubbles
+            through fun and satisfying levels.
+          </p>
+
+          <div class="store-buttons">
+            <a class="store-button" href="#" aria-label="Get Bubble Sort Puzzle on Google Play">
+              <span class="store-icon">▶</span>
+              <span>
+                <span class="store-small">GET IT ON</span>
+                <span class="store-large">Google Play</span>
+              </span>
+            </a>
+
+            <a class="store-button" href="#" aria-label="Download Bubble Sort Puzzle on the App Store">
+              <span class="store-icon">●</span>
+              <span>
+                <span class="store-small">DOWNLOAD ON THE</span>
+                <span class="store-large">App Store</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-logo">
+          <span class="logo-icon" aria-hidden="true"></span>
+          Bubble Sort Puzzle
+        </div>
+
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#how-to-play">How to Play</a>
+          <a href="#about">About</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+
+        <p class="copyright">© 2026 Bubble Sort Puzzle</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const CAPACITY = 4;
+
+      // Each tube is stored from bottom bubble to top bubble.
+      const INITIAL_STATE = [
+        ["pink", "yellow", "blue", "green"],
+        ["blue", "green", "pink", "yellow"],
+        ["green", "pink", "yellow", "blue"],
+        ["yellow", "blue", "green", "pink"],
+        [],
+        []
+      ];
+
+      const colorNames = {
+        pink: "pink",
+        yellow: "yellow",
+        blue: "blue",
+        green: "green"
+      };
+
+      const game = document.getElementById("demoGame");
+      const tubeContainer = document.getElementById("demoTubes");
+      const tubeButtons = [...tubeContainer.querySelectorAll(".demo-tube")];
+      const status = document.getElementById("demoStatus");
+      const moveLabel = document.getElementById("demoMoves");
+      const restartButton = document.getElementById("restartDemo");
+      const undoButton = document.getElementById("undoDemo");
+      const hintButton = document.getElementById("hintDemo");
+
+      let state = cloneState(INITIAL_STATE);
+      let selectedTube = null;
+      let hintTarget = null;
+      let moveCount = 0;
+      let history = [];
+      let completed = false;
+
+      function cloneState(value) {
+        return value.map((tube) => [...tube]);
+      }
+
+      function stateKey(value) {
+        return value.map((tube) => tube.join(",")).join("|");
+      }
+
+      function isUniformFull(tube) {
+        return (
+          tube.length === CAPACITY &&
+          tube.every((bubble) => bubble === tube[0])
+        );
+      }
+
+      function isSolved(value) {
+        return value.every((tube) => tube.length === 0 || isUniformFull(tube));
+      }
+
+      function isLegalMove(value, from, to) {
+        if (from === to) return false;
+
+        const source = value[from];
+        const target = value[to];
+
+        if (!source.length || target.length >= CAPACITY) return false;
+
+        const movingColor = source[source.length - 1];
+        return !target.length || target[target.length - 1] === movingColor;
+      }
+
+      function getLegalMoves(value) {
+        const legalMoves = [];
+
+        for (let from = 0; from < value.length; from += 1) {
+          const source = value[from];
+          if (!source.length) continue;
+
+          for (let to = 0; to < value.length; to += 1) {
+            const target = value[to];
+
+            if (!isLegalMove(value, from, to)) continue;
+
+            // Moving a completed tube into an empty tube only creates an
+            // equivalent state and makes hint searching unnecessarily slower.
+            if (isUniformFull(source) && target.length === 0) continue;
+
+            legalMoves.push([from, to]);
+          }
+        }
+
+        return legalMoves;
+      }
+
+      function applyMove(value, from, to) {
+        const next = cloneState(value);
+        next[to].push(next[from].pop());
+        return next;
+      }
+
+      function setStatus(message, type = "") {
+        status.textContent = message;
+        status.classList.remove("success", "warning");
+        if (type) status.classList.add(type);
+      }
+
+      function render() {
+        tubeButtons.forEach((button, index) => {
+          const tube = state[index];
+          button.innerHTML = tube
+            .map(
+              (color) =>
+                `<span class="ball ${color}" aria-hidden="true"></span>`
+            )
+            .join("");
+
+          button.classList.toggle("selected", selectedTube === index);
+          button.classList.toggle("hint-target", hintTarget === index);
+
+          const validTarget =
+            selectedTube !== null &&
+            selectedTube !== index &&
+            isLegalMove(state, selectedTube, index);
+
+          button.classList.toggle("valid-target", validTarget);
+          button.setAttribute(
+            "aria-pressed",
+            selectedTube === index ? "true" : "false"
+          );
+
+          const contents = tube.length
+            ? tube.map((color) => colorNames[color]).join(", ")
+            : "empty";
+
+          button.setAttribute(
+            "aria-label",
+            `Tube ${index + 1}: ${contents}`
+          );
+        });
+
+        moveLabel.textContent = `Moves: ${moveCount}`;
+        undoButton.disabled = history.length === 0 || completed;
+        hintButton.disabled = completed;
+        game.classList.toggle("demo-complete", completed);
+      }
+
+      function animateInvalid(index) {
+        const button = tubeButtons[index];
+        button.classList.remove("shake");
+        void button.offsetWidth;
+        button.classList.add("shake");
+      }
+
+      function completeGame() {
+        completed = true;
+        selectedTube = null;
+        hintTarget = null;
+        setStatus(
+          `Great job! You solved the demo in ${moveCount} moves. Tap Replay to play again.`,
+          "success"
+        );
+        render();
+      }
+
+      function handleTubeClick(index) {
+        if (completed) return;
+
+        hintTarget = null;
+
+        if (selectedTube === null) {
+          if (!state[index].length) {
+            animateInvalid(index);
+            setStatus("That tube is empty. Choose a tube containing a bubble.", "warning");
+            return;
+          }
+
+          selectedTube = index;
+          setStatus("Now choose an empty tube or a tube with the same color on top.");
+          render();
+          return;
+        }
+
+        if (selectedTube === index) {
+          selectedTube = null;
+          setStatus("Selection cancelled. Choose another tube.");
+          render();
+          return;
+        }
+
+        if (!isLegalMove(state, selectedTube, index)) {
+          animateInvalid(index);
+          setStatus(
+            "That move is not allowed. Match the top color or use an empty tube.",
+            "warning"
+          );
+          return;
+        }
+
+        history.push(cloneState(state));
+        state = applyMove(state, selectedTube, index);
+        moveCount += 1;
+        selectedTube = null;
+        setStatus("Nice move! Keep sorting the bubbles.");
+        render();
+
+        if (isSolved(state)) {
+          completeGame();
+        }
+      }
+
+      function restartGame() {
+        state = cloneState(INITIAL_STATE);
+        selectedTube = null;
+        hintTarget = null;
+        moveCount = 0;
+        history = [];
+        completed = false;
+        setStatus("Tap a tube, then move its top bubble to an empty or matching tube.");
+        render();
+      }
+
+      function undoMove() {
+        if (!history.length || completed) return;
+
+        state = history.pop();
+        moveCount = Math.max(0, moveCount - 1);
+        selectedTube = null;
+        hintTarget = null;
+        setStatus("Move undone. Try a different path.");
+        render();
+      }
+
+      function findHint(value) {
+        if (isSolved(value)) return null;
+
+        const queue = [{ state: cloneState(value), firstMove: null }];
+        const visited = new Set([stateKey(value)]);
+        let cursor = 0;
+        const SEARCH_LIMIT = 50000;
+
+        while (cursor < queue.length && visited.size < SEARCH_LIMIT) {
+          const current = queue[cursor];
+          cursor += 1;
+
+          for (const move of getLegalMoves(current.state)) {
+            const next = applyMove(current.state, move[0], move[1]);
+            const key = stateKey(next);
+
+            if (visited.has(key)) continue;
+            visited.add(key);
+
+            const firstMove = current.firstMove || move;
+
+            if (isSolved(next)) {
+              return firstMove;
+            }
+
+            queue.push({ state: next, firstMove });
+          }
+        }
+
+        return null;
+      }
+
+      function showHint() {
+        if (completed) return;
+
+        setStatus("Finding a helpful move…");
+        hintButton.disabled = true;
+
+        window.setTimeout(() => {
+          const hint = findHint(state);
+          hintButton.disabled = false;
+
+          if (!hint) {
+            selectedTube = null;
+            hintTarget = null;
+            setStatus("No hint was found. Use Replay to reset the demo.", "warning");
+            render();
+            return;
+          }
+
+          selectedTube = hint[0];
+          hintTarget = hint[1];
+          const movingColor =
+            state[hint[0]][state[hint[0]].length - 1];
+
+          setStatus(
+            `Hint: move the ${colorNames[movingColor]} bubble from tube ${
+              hint[0] + 1
+            } to tube ${hint[1] + 1}.`
+          );
+          render();
+        }, 40);
+      }
+
+      tubeButtons.forEach((button, index) => {
+        button.addEventListener("click", () => handleTubeClick(index));
+      });
+
+      restartButton.addEventListener("click", restartGame);
+      undoButton.addEventListener("click", undoMove);
+      hintButton.addEventListener("click", showHint);
+
+      render();
+    })();
+  </script>
+
+</body>
+</html>
